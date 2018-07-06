@@ -11,7 +11,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelParser {
 	private static final String EXCEL_PARSER_PROPERTIES = "src/main/resources/properties/excelParser.properties";
-
+        private static final String[] MOBILE_TYPES = {"New", "Porting", "Porting with same SIM"};
+	
 	public static void main(String args[]) {
 		try {
 			Convert conv = new Convert(); // Класс, в котором будет происходить преобразование
@@ -42,4 +43,13 @@ public class ExcelParser {
 		}
 
 	}
+public static void createDropdownList(XSSFSheet worksheet) {
+        DataValidationHelper validationHelper = new XSSFDataValidationHelper(worksheet);
+        CellRangeAddressList addressList = new CellRangeAddressList(1, 10, 0, 0);
+        DataValidationConstraint constraint = validationHelper
+                .createExplicitListConstraint(MOBILE_TYPES);
+        DataValidation dataValidation = validationHelper.createValidation(constraint, addressList);
+        dataValidation.setSuppressDropDownArrow(true);
+        worksheet.addValidationData(dataValidation);
+    }
 }
